@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ml-agent"
+version = "0.1.0"
+description = "Recipe-driven ML experimentation engine for tabular binary classification."
+requires-python = ">=3.10"
+dependencies = [
+    "pandas",
+    "numpy",
+    "scikit-learn",
+    "lightgbm",
+    "xgboost",
+    "pyyaml",
+    "click",
+    "pyarrow",
+    "scipy",
+]
+
+[project.scripts]
+ml-agent = "ml_agent.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["ml_agent*"]

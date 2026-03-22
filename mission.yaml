@@ -1,0 +1,32 @@
+project_name: bees_order_days_challenge
+task_type: regression
+target_column: remaining_order_days
+train_path: data/historical_orders.parquet
+test_path: data/august_with_missing_order_days.parquet
+primary_metric: rmse
+trial_budget: 20
+allowed_models:
+  - lr
+  - dt
+  - svm
+  - poisson
+
+split_seed: 42
+model_seed: 42
+context: >
+  The goal is to predict the number of remaining order days for each user for the month of August 2022.
+  Predictions must be made at every point of the month.
+  The target is the count of distinct days on which orders will be placed from that point until the end of the month.
+domain_knowledge:
+  unit_of_analysis: "One row per (user, date) or just per user in a given snapshot."
+  group_structure:
+    - "Users (account_id) are the primary grouping key."
+    - "Historical transaction data is available in 'historical_orders.parquet'."
+  temporal_dynamics:
+    - "The prediction is specifically for the REMAINING orders left in the month."
+    - "For example, if a user has 3 total order days and we are at the beginning of the month, the prediction is 3. If they already placed 1 order day, the prediction becomes 2."
+  feature_priors:
+    - "Historical order frequency is potentially the strongest signal."
+    - "The file 'august_total_sales.parquet' contains accurate forecasted total transaction amount for August for each user, which can be treated as a true value proxy."
+  evaluation_nuances:
+    - "The goal is smart resource allocation, so predicting the volume of remaining distinct order days is critical."
